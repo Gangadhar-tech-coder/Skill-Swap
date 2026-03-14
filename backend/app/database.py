@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Use SQLite for development, PostgreSQL for production
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./skillswap.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///skillswap.db")
 
 # Handle SQLite-specific configuration
 if DATABASE_URL.startswith("sqlite"):
