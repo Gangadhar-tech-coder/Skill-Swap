@@ -3,7 +3,7 @@
  * Only accessible by admin users.
  */
 import { useState, useEffect } from 'react';
-import { Shield, Users, BookOpen, Ban, UserCheck, BarChart3, AlertCircle } from 'lucide-react';
+import { Shield, Users, BookOpen, Ban, UserCheck, BarChart3, AlertCircle, Award, Check, X } from 'lucide-react';
 import api from '../services/api';
 import useAuthStore from '../store/authStore';
 
@@ -12,6 +12,8 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [stats, setStats] = useState(null);
+  const [premiumRequests, setPremiumRequests] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [tab, setTab] = useState('users');
   const [loading, setLoading] = useState(true);
 
@@ -21,18 +23,31 @@ export default function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const [usersRes, sessionsRes, statsRes] = await Promise.all([
+      const [usersRes, sessionsRes, statsRes, premiumRes, coursesRes] = await Promise.all([
         api.get('/api/admin/users'),
         api.get('/api/admin/sessions'),
         api.get('/api/admin/stats'),
+        api.get('/api/admin/premium-requests'),
+        api.get('/api/courses/'),
       ]);
       setUsers(usersRes.data);
       setSessions(sessionsRes.data);
       setStats(statsRes.data);
+      setPremiumRequests(premiumRes.data);
+      setCourses(coursesRes.data);
     } catch (err) {
       console.error(err);
     }
     setLoading(false);
+  };
+
+  const handlePremiumAction = async (requestId, action) => {
+    try {
+      await api.post(`/api/admin/premium-requests/${requestId}/${action}`);
+      fetchData();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Action failed');
+    }
   };
 
   const handleBan = async (userId, isBanned) => {
@@ -69,6 +84,8 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'users', label: 'Users', icon: Users, count: stats?.total_users },
     { id: 'sessions', label: 'Sessions', icon: BookOpen, count: stats?.total_sessions },
+    { id: 'premium', label: 'Premium Requests', icon: Award, count: premiumRequests.length },
+    { id: 'courses', label: 'Courses', icon: BookOpen, count: courses.length },
     { id: 'stats', label: 'Statistics', icon: BarChart3 },
   ];
 
@@ -205,6 +222,80 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* Premium Requests Tab */}
+        {tab === 'premium' && (
+          <div className="glass-card animate-fade-in">
+            {premiumRequests.length === 0 ? (
+              <p style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No premium teacher requests</p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {premiumRequests.map(req => (
+                  <div key={req.id} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '1rem', borderRadius: '10px', background: 'rgba(15,15,26,0.4)',
+                    border: '1px solid rgba(108,99,255,0.08)', flexWrap: 'wrap', gap: '0.75rem',
+                  }}>
+                    <div>
+                      <p style={{ fontWeight: 600 }}>User #{req.user_id}</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
+                        Document: <a href={req.license_document} target="_blank" rel="noreferrer"
+                          style={{ color: 'var(--primary-light)' }}>{req.license_document?.substring(0, 40)}...</a>
+                      </p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                        Applied: {new Date(req.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      {req.status === 'pending' ? (
+                        <>
+                          <button onClick={() => handlePremiumAction(req.id, 'approve')}
+                            className="btn-accent" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <Check size={14} /> Approve
+                          </button>
+                          <button onClick={() => handlePremiumAction(req.id, 'reject')}
+                            className="btn-danger" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                            <X size={14} /> Reject
+                          </button>
+                        </>
+                      ) : (
+                        <span className={`badge ${req.status === 'approved' ? 'badge-accent' : 'badge-secondary'}`}>
+                          {req.status}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Courses Tab */}
+        {tab === 'courses' && (
+          <div className="glass-card animate-fade-in">
+            {courses.length === 0 ? (
+              <p style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No courses yet</p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                {courses.map(c => (
+                  <div key={c.id} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '0.85rem 1rem', borderRadius: '10px', background: 'rgba(15,15,26,0.4)',
+                  }}>
+                    <div>
+                      <p style={{ fontWeight: 600, fontSize: '0.95rem' }}>{c.title}</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                        {c.category} • {c.lectures?.length || 0} lectures • Teacher #{c.teacher_id}
+                      </p>
+                    </div>
+                    <span className="badge badge-primary">{c.price} credits</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Stats Tab */}
         {tab === 'stats' && stats && (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
@@ -213,6 +304,8 @@ export default function AdminDashboard() {
               { label: 'Total Sessions', value: stats.total_sessions, color: 'var(--accent)' },
               { label: 'Completed', value: stats.completed_sessions, color: '#FFD700' },
               { label: 'Banned Users', value: stats.banned_users, color: 'var(--secondary)' },
+              { label: 'Total Courses', value: stats.total_courses || 0, color: 'var(--primary-light)' },
+              { label: 'Premium Requests', value: stats.pending_premium || 0, color: '#FF9800' },
             ].map((s, i) => (
               <div key={i} className="glass-card animate-fade-in-up" style={{ textAlign: 'center', padding: '2rem', animationDelay: `${i * 0.1}s` }}>
                 <p style={{ fontSize: '2.5rem', fontWeight: 800, color: s.color }}>{s.value}</p>

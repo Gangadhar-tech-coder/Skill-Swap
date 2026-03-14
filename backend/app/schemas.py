@@ -70,6 +70,10 @@ class UserBrief(BaseModel):
 # --- Premium Teacher Schemas ---
 
 class PremiumRequestCreate(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=100)
+    expertise_area: str = Field(..., min_length=2, max_length=200)
+    years_of_experience: int = Field(..., ge=0, le=50)
+    bio: str = Field(..., min_length=10, max_length=1000)
     document_url: str = Field(..., min_length=5)
 
 
@@ -233,10 +237,14 @@ class CourseEnrollmentResponse(BaseModel):
 
 # --- Wallet/Transaction Schemas ---
 
+
+
 class WalletResponse(BaseModel):
     skill_credits: float
     total_earned: float
     total_spent: float
+    last_weekly_credits_at: Optional[datetime] = None
+    next_weekly_credits_in_days: Optional[int] = None
 
 
 class TransactionResponse(BaseModel):

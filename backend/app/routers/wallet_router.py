@@ -32,10 +32,21 @@ def get_wallet(
         Transaction.type == TransactionType.SPENT
     ).scalar()
 
+    # Calculate next weekly credits
+    from datetime import datetime, timedelta
+    last_credits = current_user.last_weekly_credits_at
+    next_in_days = None
+    if last_credits:
+        next_date = last_credits + timedelta(days=7)
+        delta = (next_date - datetime.utcnow()).days
+        next_in_days = max(0, delta)
+    
     return WalletResponse(
         skill_credits=current_user.skill_credits,
         total_earned=float(total_earned),
-        total_spent=float(total_spent)
+        total_spent=float(total_spent),
+        last_weekly_credits_at=last_credits,
+        next_weekly_credits_in_days=next_in_days,
     )
 
 

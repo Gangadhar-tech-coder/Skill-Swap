@@ -50,7 +50,7 @@ def apply_premium(
     return new_request
 
 
-@router.get("/my-status", response_model=PremiumRequestResponse)
+@router.get("/status")
 def get_premium_status(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -61,6 +61,6 @@ def get_premium_status(
     ).order_by(PremiumTeacherRequest.submitted_at.desc()).first()
     
     if not req:
-        raise HTTPException(status_code=404, detail="No applications found")
+        return {"status": "none", "id": 0, "user_id": current_user.id, "document_url": ""}
         
     return req

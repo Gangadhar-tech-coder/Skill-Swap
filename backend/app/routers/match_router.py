@@ -24,7 +24,11 @@ def get_match_suggestions(
     Returns users sorted by compatibility score based on skill overlap,
     reputation, and availability.
     """
-    matches = find_matches(current_user, db, limit=10)
+    try:
+        matches = find_matches(current_user, db, limit=10)
+    except Exception as e:
+        print(f"Match error: {e}")
+        return []
 
     results = []
     for match in matches:
@@ -35,7 +39,8 @@ def get_match_suggestions(
                 name=user.name,
                 location=user.location,
                 reputation_score=user.reputation_score,
-                skill_credits=user.skill_credits
+                skill_credits=user.skill_credits,
+                is_premium_teacher=user.is_premium_teacher,
             ),
             compatibility_score=match["compatibility_score"],
             matching_skills=match["matching_skills"],

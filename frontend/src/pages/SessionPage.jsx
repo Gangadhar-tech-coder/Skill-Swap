@@ -41,7 +41,7 @@ export default function SessionPage() {
 
   const connectWebSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws/chat/${id}`;
+    const wsUrl = `${protocol}//${window.location.host}/api/chat/ws/${id}`;
     try {
       const ws = new WebSocket(wsUrl);
       ws.onmessage = (event) => {
@@ -97,7 +97,14 @@ export default function SessionPage() {
 
   const handleRate = async () => {
     try {
-      await api.post(`/api/sessions/rate/${id}`, rating);
+      // Calculate average rating from the three categories
+      const avgRating = parseFloat(((rating.communication + rating.teaching_quality + rating.professionalism) / 3).toFixed(1));
+      await api.post(`/api/sessions/rate/${id}`, {
+        rating: avgRating,
+        content: rating.review || '',
+        target_type: 'SESSION',
+        target_id: parseInt(id),
+      });
       navigate('/dashboard');
     } catch (err) {
       alert(err.response?.data?.detail || 'Failed to submit rating');

@@ -54,6 +54,7 @@ export default function Dashboard() {
   return (
     <div className="gradient-bg" style={{ minHeight: 'calc(100vh - 60px)', padding: '2rem 1.5rem', position: 'relative' }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
         {/* Welcome Header */}
         <div className="animate-fade-in-up" style={{ marginBottom: '2rem' }}>
           <h1 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
@@ -63,6 +64,24 @@ export default function Dashboard() {
           </h1>
           <p style={{ color: 'var(--text-secondary)' }}>Here's your skill exchange overview</p>
         </div>
+        
+        {/* Skill Guard Banner */}
+        {(!user?.skills || user?.skills.length === 0) && (
+          <div className="glass-card animate-fade-in-down" style={{ background: 'rgba(255, 107, 157, 0.1)', border: '1px solid rgba(255, 107, 157, 0.3)', marginBottom: '2rem', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--gradient-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Star size={24} color="white" />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#FF6B9D' }}>Action Required: Add Your Skills</h3>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>You haven't added any skills yet. To start requesting or offering skill swaps, you need at least one skill on your profile.</p>
+              </div>
+            </div>
+            <Link to="/profile" className="btn-accent" style={{ textDecoration: 'none' }}>
+              Add Skills Now
+            </Link>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

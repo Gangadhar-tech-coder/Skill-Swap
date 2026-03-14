@@ -4,8 +4,9 @@
  */
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Zap, User, LogOut, LayoutDashboard, Store, Sparkles, Wallet, Shield } from 'lucide-react';
+import { Menu, X, Zap, User, LogOut, LayoutDashboard, Store, Sparkles, Wallet, Shield, MessageSquare, Award, BookOpen } from 'lucide-react';
 import useAuthStore from '../store/authStore';
+import useChatStore from '../store/chatStore';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,8 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
+  const { toggleChat } = useChatStore();
+
   const isActive = (path) => location.pathname === path;
 
   const navLinks = token ? [
@@ -26,6 +29,8 @@ export default function Navbar() {
     { to: '/marketplace', label: 'Marketplace', icon: Store },
     { to: '/matches', label: 'Matches', icon: Sparkles },
     { to: '/wallet', label: 'Wallet', icon: Wallet },
+    { to: '/courses', label: 'Courses', icon: BookOpen },
+    { to: '/premium', label: 'Premium', icon: Award },
   ] : [];
 
   return (
@@ -86,6 +91,15 @@ export default function Navbar() {
                   <Shield size={14} /> Admin
                 </Link>
               )}
+              
+              <button onClick={toggleChat} style={{
+                background: 'rgba(108,99,255,0.15)', border: 'none', color: 'var(--primary-light)',
+                width: '38px', height: '38px', borderRadius: '50%', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'var(--transition)'
+              }}>
+                <MessageSquare size={18} />
+              </button>
+
               <Link to="/profile" style={{
                 display: 'flex', alignItems: 'center', gap: '0.5rem',
                 textDecoration: 'none', color: 'var(--text-primary)',

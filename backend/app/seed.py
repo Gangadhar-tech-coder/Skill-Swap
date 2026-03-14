@@ -131,24 +131,7 @@ def seed():
         (users[5], users[3], "Guitar", "Machine Learning", 1.0, "pending"),
     ]
 
-    for teacher, learner, skill_o, skill_r, duration, status in sessions_data:
-        session = SessionModel(
-            teacher_id=teacher.id, learner_id=learner.id,
-            skill_offered=skill_o, skill_requested=skill_r,
-            duration=duration, status=SessionStatus(status),
-            completed_at=datetime.utcnow() if status == "completed" else None,
-        )
 
-                target_id=session.id, target_user_id=teacher.id,
-                rating=4.5, content="Great session!"
-            ))
-            db.add(Review(
-                author_id=teacher.id, target_type=ReviewTargetType.SESSION,
-                target_id=session.id, target_user_id=learner.id,
-                rating=4.5, content="Excellent learner!"
-            ))
-
-    db.commit()
 
     # Create Premium Course for Alice
     course = Course(

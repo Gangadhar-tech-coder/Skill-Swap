@@ -2,7 +2,7 @@
  * Wallet page – credit balance, earned/spent summary, and transaction history.
  */
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Clock, Coins } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Clock, Coins, Gift } from 'lucide-react';
 import api from '../services/api';
 import useAuthStore from '../store/authStore';
 
@@ -105,6 +105,28 @@ export default function WalletPage() {
               -{wallet?.total_spent?.toFixed(1) || '0.0'}
             </p>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.78rem', marginTop: '0.25rem' }}>Credits from learning</p>
+          </div>
+        </div>
+
+        {/* Weekly Credit Allocation */}
+        <div className="glass-card animate-fade-in-up delay-200" style={{
+          background: 'linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(108,99,255,0.1) 100%)',
+          border: '1px solid rgba(0,212,170,0.2)',
+          marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--gradient-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Gift size={22} color="white" />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--accent)' }}>Weekly Credit Allocation</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                You receive <strong>5 free skill credits</strong> every week!
+                {wallet?.next_weekly_credits_in_days != null && (
+                  <> Next allocation in <strong style={{ color: 'var(--accent)' }}>{wallet.next_weekly_credits_in_days} day{wallet.next_weekly_credits_in_days !== 1 ? 's' : ''}</strong>.</>
+                )}
+              </p>
+            </div>
           </div>
         </div>
 

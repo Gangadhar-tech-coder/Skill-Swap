@@ -5,6 +5,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import GlobalChat from './components/GlobalChat';
 import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -16,6 +17,9 @@ import MatchSuggestions from './pages/MatchSuggestions';
 import SessionPage from './pages/SessionPage';
 import WalletPage from './pages/Wallet';
 import AdminDashboard from './pages/AdminDashboard';
+import PremiumTeacher from './pages/PremiumTeacher';
+import Courses from './pages/Courses';
+import CreateCourse from './pages/CreateCourse';
 import useAuthStore from './store/authStore';
 import './index.css';
 
@@ -45,7 +49,11 @@ export default function App() {
             <Route path="/session/:id" element={<ProtectedRoute><SessionPage /></ProtectedRoute>} />
             <Route path="/wallet" element={<ProtectedRoute><WalletPage /></ProtectedRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/premium" element={<ProtectedRoute><PremiumTeacher /></ProtectedRoute>} />
+            <Route path="/courses" element={<ProtectedRoute><Courses /></ProtectedRoute>} />
+            <Route path="/courses/create" element={<ProtectedRoute><CreateCourse /></ProtectedRoute>} />
           </Routes>
+          {token && <GlobalChat />}
         </main>
       </div>
     </BrowserRouter>

@@ -29,6 +29,21 @@ def get_all_courses(db: Session = Depends(get_db)):
     return courses
 
 
+@router.get("/enrolled", response_model=List[CourseEnrollmentResponse])
+def get_enrolled_courses(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get courses the current user has purchased/enrolled in."""
+    enrollments = db.query(CourseEnrollment).options(
+        joinedload(CourseEnrollment.course).joinedload(Course.teacher),
+        joinedload(CourseEnrollment.course).joinedload(Course.lectures),
+    ).filter(
+        CourseEnrollment.user_id == current_user.id
+    ).order_by(CourseEnrollment.purchased_at.desc()).all()
+    return enrollments
+
+
 @router.post("/", response_model=CourseResponse)
 def create_course(
     req: CourseCreate,
