@@ -29,23 +29,7 @@ class Token(BaseModel):
 
 # --- User Schemas ---
 
-class UserProfile(BaseModel):
-    id: int
-    name: str
-    email: str
-    bio: str
-    location: str
-    availability: str
-    skill_credits: float
-    reputation_score: float
-    is_admin: bool
-    is_premium_teacher: bool
-    verification_status: str
-    created_at: datetime
-    skills: List["SkillResponse"] = []
 
-    class Config:
-        from_attributes = True
 
 
 class UserUpdate(BaseModel):
@@ -119,6 +103,25 @@ class SkillBrowse(BaseModel):
     skill_level: str
     description: str
     user: UserBrief
+
+    class Config:
+        from_attributes = True
+
+
+class UserProfile(BaseModel):
+    id: int
+    name: str
+    email: str
+    bio: str
+    location: str
+    availability: str
+    skill_credits: float
+    reputation_score: float
+    is_admin: bool
+    is_premium_teacher: bool
+    verification_status: str
+    created_at: datetime
+    skills: List[SkillResponse] = []
 
     class Config:
         from_attributes = True
