@@ -5,7 +5,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '',  // Uses Vite proxy
+  baseURL: import.meta.env.VITE_API_URL || '',  // Empty = Vite proxy (dev), env var = Render URL (prod)
   headers: {
     'Content-Type': 'application/json',
   },

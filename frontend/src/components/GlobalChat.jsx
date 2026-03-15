@@ -52,8 +52,18 @@ export default function GlobalChat() {
     }).catch(() => setLoading(false));
 
     // Connect WebSocket
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/api/chat/ws/${activeSessionId}`;
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    let wsUrl;
+    if (apiUrl) {
+      // Production: connect directly to backend
+      const wsProtocol = apiUrl.startsWith('https') ? 'wss:' : 'ws:';
+      const host = apiUrl.replace(/^https?:\/\//, '');
+      wsUrl = `${wsProtocol}//${host}/api/chat/ws/${activeSessionId}`;
+    } else {
+      // Dev: use Vite proxy
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      wsUrl = `${protocol}//${window.location.host}/api/chat/ws/${activeSessionId}`;
+    }
     
     try {
       const ws = new WebSocket(wsUrl);

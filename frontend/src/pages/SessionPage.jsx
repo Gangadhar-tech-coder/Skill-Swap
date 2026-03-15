@@ -40,8 +40,16 @@ export default function SessionPage() {
   };
 
   const connectWebSocket = () => {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/api/chat/ws/${id}`;
+    const apiUrl = import.meta.env.VITE_API_URL || '';
+    let wsUrl;
+    if (apiUrl) {
+      const wsProtocol = apiUrl.startsWith('https') ? 'wss:' : 'ws:';
+      const host = apiUrl.replace(/^https?:\/\//, '');
+      wsUrl = `${wsProtocol}//${host}/api/chat/ws/${id}`;
+    } else {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      wsUrl = `${protocol}//${window.location.host}/api/chat/ws/${id}`;
+    }
     try {
       const ws = new WebSocket(wsUrl);
       ws.onmessage = (event) => {
