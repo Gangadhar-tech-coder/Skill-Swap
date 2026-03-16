@@ -13,7 +13,6 @@ from sqlalchemy.orm import Session
 
 from .database import get_db
 from .models import User
-
 # Configuration
 SECRET_KEY = os.getenv("SECRET_KEY", "skillswap-super-secret-key-change-in-production")
 ALGORITHM = "HS256"

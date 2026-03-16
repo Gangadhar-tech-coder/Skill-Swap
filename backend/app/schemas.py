@@ -59,8 +59,6 @@ class PremiumRequestCreate(BaseModel):
     years_of_experience: int = Field(..., ge=0, le=50)
     bio: str = Field(..., min_length=10, max_length=1000)
     document_url: str = Field(..., min_length=5)
-
-
 class PremiumRequestResponse(BaseModel):
     id: int
     user_id: int
@@ -72,10 +70,6 @@ class PremiumRequestResponse(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-# --- Skill Schemas ---
-
 class SkillCreate(BaseModel):
     skill_name: str = Field(..., min_length=1, max_length=200)
     skill_type: str = Field(..., pattern="^(teach|learn)$")

@@ -12,7 +12,6 @@ Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
-
 def seed():
     """Seed the database with sample users, skills, and sessions."""
     # No manual delete needed since drop_all handles it

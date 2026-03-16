@@ -14,8 +14,7 @@ def get_all_skill_names(db: Session) -> List[str]:
     """Get a sorted list of all unique skill names in the system."""
     skills = db.query(Skill.skill_name).distinct().all()
     return sorted(set(s[0].lower() for s in skills))
-
-
+~~~
 def encode_skills(user_skills: List[Skill], all_skills: List[str], skill_type: SkillType) -> np.ndarray:
     """
     Encode a user's skills as a binary vector.

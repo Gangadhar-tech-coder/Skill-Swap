@@ -109,8 +109,6 @@ class PremiumTeacherRequest(Base):
     resolved_at = Column(DateTime, nullable=True)
     
     user = relationship("User", back_populates="t_requests")
-
-
 class Skill(Base):
     """
     A skill entry linked to a user. Can be either a skill they teach or want to learn.
