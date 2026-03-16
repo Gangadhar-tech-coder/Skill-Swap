@@ -11,13 +11,10 @@ from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/user", tags=["User Profile"])
 
-
 @router.get("/profile", response_model=UserProfile)
 def get_profile(current_user: User = Depends(get_current_user)):
     """Get the current user's full profile including skills."""
     return current_user
-
-
 @router.get("/profile/{user_id}", response_model=UserProfile)
 def get_user_profile(user_id: int, db: Session = Depends(get_db)):
     """Get a specific user's public profile."""

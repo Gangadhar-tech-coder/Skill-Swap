@@ -20,8 +20,6 @@ def list_users(
 ):
     """List all users in the system. Admin only."""
     return db.query(User).order_by(User.created_at.desc()).all()
-
-
 @router.get("/sessions", response_model=List[SessionResponse])
 def list_sessions(
     admin: User = Depends(get_admin_user),

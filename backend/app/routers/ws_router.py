@@ -13,7 +13,6 @@ from ..schemas import ChatMessageResponse
 from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
-
 # Store active connections per session
 # Key: session_id, Value: list of WebSocket connections
 active_connections: Dict[int, List[WebSocket]] = {}

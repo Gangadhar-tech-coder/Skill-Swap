@@ -11,8 +11,6 @@ from ..schemas import PremiumRequestCreate, PremiumRequestResponse
 from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/premium", tags=["Premium"])
-
-
 @router.post("/apply", response_model=PremiumRequestResponse)
 def apply_premium(
     req: PremiumRequestCreate,

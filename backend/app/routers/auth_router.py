@@ -11,7 +11,6 @@ from ..auth import hash_password, verify_password, create_access_token
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
-
 @router.post("/register", response_model=UserProfile, status_code=201)
 def register(user_data: UserRegister, db: Session = Depends(get_db)):
     """

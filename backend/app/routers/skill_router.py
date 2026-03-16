@@ -11,8 +11,6 @@ from ..schemas import SkillCreate, SkillResponse, SkillBrowse
 from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/skills", tags=["Skills"])
-
-
 @router.post("/add", response_model=SkillResponse, status_code=201)
 def add_skill(
     skill_data: SkillCreate,

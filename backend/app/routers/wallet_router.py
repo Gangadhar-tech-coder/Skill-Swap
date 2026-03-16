@@ -12,8 +12,6 @@ from ..schemas import WalletResponse, TransactionResponse
 from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/wallet", tags=["Wallet"])
-
-
 @router.get("/", response_model=WalletResponse)
 def get_wallet(
     current_user: User = Depends(get_current_user),

@@ -13,7 +13,6 @@ from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/sessions", tags=["Sessions"])
 
-
 @router.post("/request", response_model=SessionResponse, status_code=201)
 def request_session(
     req: SessionRequest,

@@ -13,7 +13,6 @@ from ..services.matching import find_matches
 
 router = APIRouter(prefix="/api/match", tags=["AI Matching"])
 
-
 @router.get("/suggestions", response_model=List[MatchResult])
 def get_match_suggestions(
     current_user: User = Depends(get_current_user),

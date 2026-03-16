@@ -12,7 +12,6 @@ from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/courses", tags=["Courses"])
 
-
 @router.get("/", response_model=List[CourseResponse])
 def get_all_courses(db: Session = Depends(get_db)):
     """Publicly browse all premium courses."""
