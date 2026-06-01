@@ -96,7 +96,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "skillswap.db",
+            "NAME": os.getenv("SQLITE_PATH", BASE_DIR / "skillswap.db"),
         }
     }
 
