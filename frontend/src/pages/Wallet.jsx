@@ -133,10 +133,10 @@ export default function WalletPage() {
         </div>
 
         {/* Weekly Credit Allocation */}
-        <div className="glass-card animate-fade-in-up delay-200" style={{
+        <div className="glass-card animate-fade-in-up delay-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-4" style={{
           background: 'linear-gradient(135deg, rgba(0,212,170,0.1) 0%, rgba(108,99,255,0.1) 100%)',
           border: '1px solid rgba(0,212,170,0.2)',
-          marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          marginBottom: '2rem',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--gradient-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -210,7 +210,7 @@ export default function WalletPage() {
 
         {/* Transaction History */}
         <div className="glass-card animate-fade-in-up delay-300">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2" style={{ marginBottom: '1.25rem' }}>
             <h2 style={{ fontSize: '1.15rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Clock size={18} /> Transaction History
             </h2>
@@ -225,8 +225,7 @@ export default function WalletPage() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {transactions.map((tx) => (
-                <div key={tx.id} style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                <div key={tx.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3" style={{
                   padding: '0.85rem 1rem', borderRadius: '10px',
                   background: 'rgba(15,15,26,0.4)', border: '1px solid rgba(108,99,255,0.08)',
                 }}>

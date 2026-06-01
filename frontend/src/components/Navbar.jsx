@@ -61,8 +61,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
-             className="hidden md:flex">
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} style={{
               display: 'flex', alignItems: 'center', gap: '0.4rem',
@@ -79,19 +78,42 @@ export default function Navbar() {
         </div>
 
         {/* Auth Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}
-             className="hidden md:flex">
-          {token ? (
-            <>
-              {user?.is_admin && (
-                <Link to="/admin" style={{
+        <div className="flex items-center gap-3">
+          {/* Desktop Only Actions */}
+          <div className="hidden md:flex items-center gap-3">
+            {token ? (
+              <>
+                {user?.is_admin && (
+                  <Link to="/admin" style={{
+                    display: 'flex', alignItems: 'center', gap: '0.3rem',
+                    color: 'var(--accent)', textDecoration: 'none', fontSize: '0.85rem',
+                  }}>
+                    <Shield size={14} /> Admin
+                  </Link>
+                )}
+                <button onClick={handleLogout} style={{
                   display: 'flex', alignItems: 'center', gap: '0.3rem',
-                  color: 'var(--accent)', textDecoration: 'none', fontSize: '0.85rem',
+                  background: 'none', border: 'none', color: 'var(--text-muted)',
+                  cursor: 'pointer', fontSize: '0.85rem',
                 }}>
-                  <Shield size={14} /> Admin
+                  <LogOut size={16} /> Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn-secondary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
+                  Login
                 </Link>
-              )}
-              
+                <Link to="/register" className="btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', textDecoration: 'none' }}>
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Always Visible Actions (Profile & Chat) */}
+          {token && (
+            <div className="flex items-center gap-3">
               <button onClick={toggleChat} style={{
                 background: 'rgba(108,99,255,0.15)', border: 'none', color: 'var(--primary-light)',
                 width: '38px', height: '38px', borderRadius: '50%', cursor: 'pointer',
@@ -112,34 +134,19 @@ export default function Navbar() {
                 }}>
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
-                <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>{user?.name?.split(' ')[0]}</span>
+                <span className="hidden sm:inline-block" style={{ fontSize: '0.9rem', fontWeight: 500 }}>
+                  {user?.name?.split(' ')[0]}
+                </span>
               </Link>
-              <button onClick={handleLogout} style={{
-                display: 'flex', alignItems: 'center', gap: '0.3rem',
-                background: 'none', border: 'none', color: 'var(--text-muted)',
-                cursor: 'pointer', fontSize: '0.85rem',
-              }}>
-                <LogOut size={16} /> Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="btn-secondary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}>
-                Login
-              </Link>
-              <Link to="/register" className="btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', textDecoration: 'none' }}>
-                Sign Up
-              </Link>
-            </>
+            </div>
           )}
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <button onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden"
-          style={{ background: 'none', border: 'none', color: 'var(--text-primary)', cursor: 'pointer' }}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          {/* Mobile Menu Toggle */}
+          <button onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden flex items-center bg-transparent border-none cursor-pointer text-[color:var(--text-primary)]">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

@@ -65,7 +65,7 @@ export default function Profile() {
 
         {/* Profile Card */}
         <div className="glass-card animate-fade-in-up" style={{ marginBottom: '1.5rem', padding: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
               <div style={{
                 width: '70px', height: '70px', borderRadius: '18px',
@@ -94,7 +94,7 @@ export default function Profile() {
               </div>
             </div>
             <button onClick={() => editing ? handleSave() : setEditing(true)}
-              className={editing ? 'btn-accent' : 'btn-secondary'}
+              className={`${editing ? 'btn-accent' : 'btn-secondary'} w-full md:w-auto justify-center`}
               style={{ padding: '0.5rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem' }}>
               {editing ? <><Save size={16} /> Save</> : <><Edit3 size={16} /> Edit</>}
             </button>
@@ -128,7 +128,7 @@ export default function Profile() {
         </div>
 
         {/* Skills Sections */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
           {/* Teach Skills */}
           <div className="glass-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
@@ -198,9 +198,9 @@ export default function Profile() {
                   <option value="expert">Expert</option>
                 </select>
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={handleAddSkill} className="btn-primary" style={{ padding: '0.75rem 1.5rem' }}>Add</button>
-                <button onClick={() => setShowAddSkill(false)} className="btn-secondary" style={{ padding: '0.75rem 1rem' }}>Cancel</button>
+              <div className="flex flex-col sm:flex-row gap-2 w-full mt-2 sm:w-auto sm:mt-0">
+                <button onClick={handleAddSkill} className="btn-primary flex-1" style={{ padding: '0.75rem 1.5rem' }}>Add</button>
+                <button onClick={() => setShowAddSkill(false)} className="btn-secondary flex-1" style={{ padding: '0.75rem 1rem' }}>Cancel</button>
               </div>
             </div>
           </div>

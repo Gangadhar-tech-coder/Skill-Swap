@@ -90,11 +90,11 @@ export default function Marketplace() {
               <input className="input-field" value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Search skills... (e.g. Python, Design)" style={{ paddingLeft: '2.75rem' }} />
             </div>
-            <button type="submit" className="btn-primary" style={{ padding: '0.85rem 1.5rem' }}>
+            <button type="submit" className="btn-primary w-full sm:w-auto" style={{ padding: '0.85rem 1.5rem' }}>
               Search
             </button>
-            <button type="button" onClick={() => setShowFilters(!showFilters)} className="btn-secondary"
-              style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <button type="button" onClick={() => setShowFilters(!showFilters)} className="btn-secondary w-full sm:w-auto"
+              style={{ padding: '0.85rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
               <Filter size={16} /> Filters
             </button>
           </form>
@@ -130,7 +130,7 @@ export default function Marketplace() {
             <p style={{ color: 'var(--text-muted)' }}>Try adjusting your search or filters</p>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
             {skills.map((skill) => (
               <div key={skill.id} className="glass-card animate-fade-in">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>

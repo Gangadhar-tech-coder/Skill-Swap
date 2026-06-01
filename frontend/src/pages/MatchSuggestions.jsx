@@ -84,7 +84,7 @@ export default function MatchSuggestions() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {matches.map((match, i) => (
               <div key={i} className="glass-card animate-fade-in-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   {/* User Info */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ position: 'relative' }}>
@@ -119,7 +119,7 @@ export default function MatchSuggestions() {
                   </div>
 
                   <button onClick={() => handleRequest(match)} disabled={requesting === match.user.id}
-                    className="btn-primary" style={{
+                    className="btn-primary w-full md:w-auto justify-center" style={{
                       padding: '0.6rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.88rem',
                     }}>
                     {requesting === match.user.id ? 'Sending...' : <>Swap Skills <ArrowRight size={16} /></>}
@@ -127,7 +127,7 @@ export default function MatchSuggestions() {
                 </div>
 
                 {/* Skills */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.5rem', color: 'var(--accent)', fontSize: '0.78rem', fontWeight: 600 }}>
                       <GraduationCap size={14} /> They Teach

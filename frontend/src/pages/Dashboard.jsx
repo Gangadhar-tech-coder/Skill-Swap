@@ -67,9 +67,9 @@ export default function Dashboard() {
         
         {/* Skill Guard Banner */}
         {(!user?.skills || user?.skills.length === 0) && (
-          <div className="glass-card animate-fade-in-down" style={{ background: 'rgba(255, 107, 157, 0.1)', border: '1px solid rgba(255, 107, 157, 0.3)', marginBottom: '2rem', padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="glass-card animate-fade-in-down flex flex-col md:flex-row items-start md:items-center justify-between gap-4" style={{ background: 'rgba(255, 107, 157, 0.1)', border: '1px solid rgba(255, 107, 157, 0.3)', marginBottom: '2rem', padding: '1.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--gradient-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '48px', height: '48px', minWidth: '48px', borderRadius: '14px', background: 'var(--gradient-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Star size={24} color="white" />
               </div>
               <div>
@@ -136,7 +136,7 @@ export default function Dashboard() {
 
         {/* Recent Sessions */}
         <div className="glass-card" style={{ padding: '1.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2" style={{ marginBottom: '1.25rem' }}>
             <h2 style={{ fontSize: '1.2rem', fontWeight: 600 }}>Recent Sessions</h2>
             <span className="badge badge-primary">{sessions.length} total</span>
           </div>
@@ -148,8 +148,7 @@ export default function Dashboard() {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {sessions.slice(0, 5).map((session) => (
-                <div key={session.id} style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                <div key={session.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4" style={{
                   padding: '0.75rem 1rem', borderRadius: '10px',
                   background: 'rgba(15,15,26,0.4)', border: '1px solid rgba(108,99,255,0.1)',
                 }}>
@@ -173,7 +172,7 @@ export default function Dashboard() {
                       </p>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div className="flex flex-wrap items-center gap-3">
                     <span className={`badge ${session.status === 'completed' ? 'badge-accent' : session.status === 'pending' ? 'badge-secondary' : 'badge-primary'}`}>
                       {session.status}
                     </span>

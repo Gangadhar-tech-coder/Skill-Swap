@@ -101,14 +101,7 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Demo login hint */}
-        <div style={{
-          marginTop: '1.5rem', padding: '0.75rem', borderRadius: '10px',
-          background: 'rgba(0,212,170,0.08)', border: '1px solid rgba(0,212,170,0.2)',
-          textAlign: 'center', fontSize: '0.8rem', color: 'var(--accent-light)',
-        }}>
-          Demo: alice@example.com / password123
-        </div>
+
 
         {/* Footer */}
         <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>

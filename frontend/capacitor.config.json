@@ -1,5 +1,9 @@
 {
   "appId": "com.skillswap.app",
   "appName": "SkillSwap",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "url": "http://10.110.149.50:5174",
+    "cleartext": true
+  }
 }

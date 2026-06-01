@@ -2,21 +2,24 @@
 
 > **Learn Anything. Teach Anything. Pay With Skills.**
 
-A full-stack web application where users exchange skills instead of money. Trade hours of teaching for learning using Skill Credits.
+A full-stack web application where users exchange skills instead of money. Trade hours of teaching for learning using Skill Credits. 
+
+The platform is fully responsive and deployed natively to Android via Capacitor!
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, Vite, TailwindCSS v4, Zustand, React Router |
+| Mobile | Capacitor (Android) |
 | Backend | Django 5.1, Django REST Framework, Python 3.11 |
 | Database | SQLite (dev) / PostgreSQL (production) |
 | Auth | JWT (python-jose + bcrypt) |
 | Real-time | WebSockets (Django Channels) |
 | AI Matching | Cosine similarity (scikit-learn + numpy) |
-| Deployment | Docker + Docker Compose |
+| Deployment | Docker + Docker Compose, Vercel (Web), Render (Backend) |
 
-## Quick Start (Local Development)
+## Quick Start (Local Web Development)
 
 ### Prerequisites
 - Python 3.9+
@@ -53,13 +56,44 @@ npm run dev
 
 App available at: http://localhost:5173
 
-### 3. Demo Login
+---
 
-After seeding, login with:
-- **Email:** alice@example.com
-- **Password:** password123
+## Mobile App Development (Android)
 
-Alice is an admin user with full dashboard access.
+SkillSwap is bundled into a native Android app using **Capacitor**.
+
+### Prerequisites
+- Android Studio installed and configured
+- Android SDK installed (SDK 34+)
+- Gradle JDK set to Java 21+
+
+### Build & Run the App
+```bash
+cd frontend
+npm install
+
+# Build the production web bundle
+npm run build
+
+# Sync the web bundle into the Android Studio project
+npx cap sync android
+```
+Open Android Studio, select `frontend/android` as the project, and click **Build > Build APK** or **Run** on your emulator/device.
+
+### Capacitor Live Reload (Hot Module Replacement)
+To avoid running `build` and `sync` every time you change a UI component, you can use Live Reload!
+
+1. Ensure your computer and mobile device are on the **same Wi-Fi network**.
+2. Run the specialized dev script to broadcast Vite across your network:
+   ```bash
+   npm run dev:android
+   ```
+3. Run `npx cap sync android` to ensure the local `capacitor.config.json` is updated.
+4. Open the app on your phone/emulator. When you hit `Save` on any React file in VS Code, the Android app will update instantly!
+
+> **Production Warning**: Before building your Release APK for the Play Store, make sure to delete the `"server"` block from `frontend/capacitor.config.json` so the app doesn't attempt to load from your local IP!
+
+---
 
 ## Docker Deployment
 
@@ -71,73 +105,14 @@ docker-compose up --build
 # API at http://localhost:8000
 ```
 
-## Project Structure
-
-```
-├── backend/
-│   ├── manage.py                # Django management entry point
-│   ├── skillswap/               # Django project config
-│   │   ├── settings.py          # Settings (DB, CORS, JWT, Channels)
-│   │   ├── urls.py              # Root URL config
-│   │   ├── wsgi.py              # WSGI entry point
-│   │   └── asgi.py              # ASGI entry point (HTTP + WebSocket)
-│   ├── api/                     # Main Django app
-│   │   ├── models.py            # Django ORM models
-│   │   ├── serializers.py       # DRF serializers
-│   │   ├── views.py             # API view functions
-│   │   ├── urls.py              # API URL routing
-│   │   ├── auth.py              # JWT auth + password hashing
-│   │   ├── exceptions.py        # Custom exception handler
-│   │   ├── admin.py             # Django admin registrations
-│   │   ├── consumers.py         # WebSocket chat consumer
-│   │   ├── routing.py           # WebSocket URL routing
-│   │   ├── services/
-│   │   │   └── matching.py      # Cosine similarity engine
-│   │   └── management/
-│   │       └── commands/
-│   │           └── seed.py      # Sample data seeder
-│   ├── requirements.txt
-│   └── Dockerfile
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   ├── index.css            # Design system
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   └── ProtectedRoute.jsx
-│   │   ├── pages/
-│   │   │   ├── Landing.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   ├── Marketplace.jsx
-│   │   │   ├── MatchSuggestions.jsx
-│   │   │   ├── SessionPage.jsx
-│   │   │   ├── Wallet.jsx
-│   │   │   └── AdminDashboard.jsx
-│   │   ├── store/
-│   │   │   └── authStore.js     # Zustand state
-│   │   └── services/
-│   │       └── api.js           # Axios + JWT
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── nginx.conf
-│   └── Dockerfile
-├── docker-compose.yml
-└── README.md
-```
-
 ## Key Features
 
 - **Skill Credits Economy** – 1 hour teaching = +1 credit, learning = -1 credit
 - **AI Matching** – Cosine similarity on skill vectors + reputation + availability scoring
 - **Real-time Chat** – WebSocket-powered session chat (Django Channels)
 - **Reputation System** – Multi-factor ratings (communication, quality, professionalism)
+- **Native Android Support** – Fully responsive Capacitor app with mobile-optimized Glassmorphism UI
 - **Admin Dashboard** – User management, session overview, platform analytics
-- **Django Admin** – Full model management at /admin/
-- **Glassmorphism UI** – Premium dark theme with gradients and micro-animations
 
 ## API Endpoints
 
