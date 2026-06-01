@@ -7,25 +7,49 @@ import api from '../services/api';
 import useAuthStore from '../store/authStore';
 
 export default function WalletPage() {
-  const { user } = useAuthStore();
+  const { user, fetchProfile } = useAuthStore();
   const [wallet, setWallet] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [buyAmount, setBuyAmount] = useState(5);
+  const [buying, setBuying] = useState(false);
+  const [buySuccess, setBuySuccess] = useState('');
+  const [buyError, setBuyError] = useState('');
+
+  const fetchWalletData = async () => {
+    try {
+      const [walRes, txRes] = await Promise.all([
+        api.get('/api/wallet/'),
+        api.get('/api/wallet/transactions'),
+      ]);
+      setWallet(walRes.data);
+      setTransactions(txRes.data);
+    } catch (err) { console.error(err); }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [walRes, txRes] = await Promise.all([
-          api.get('/api/wallet/'),
-          api.get('/api/wallet/transactions'),
-        ]);
-        setWallet(walRes.data);
-        setTransactions(txRes.data);
-      } catch (err) { console.error(err); }
-      setLoading(false);
-    };
-    fetchData();
+    fetchWalletData();
   }, []);
+
+  const handleBuyCredits = async (e) => {
+    e.preventDefault();
+    setBuying(true);
+    setBuySuccess('');
+    setBuyError('');
+    try {
+      const res = await api.post('/api/wallet/buy-credits', { amount: Number(buyAmount) });
+      setBuySuccess(res.data.message);
+      await fetchWalletData(); // Refresh wallet
+      await fetchProfile();    // Refresh navbar global state
+      setBuyAmount(5);         // Reset input
+    } catch (err) {
+      setBuyError(err.response?.data?.detail || 'Failed to purchase credits.');
+    } finally {
+      setBuying(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -127,6 +151,60 @@ export default function WalletPage() {
                 )}
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Buy Credits Section */}
+        <div className="glass-card animate-fade-in-up delay-250" style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
+            <Wallet size={18} /> Buy Skill Credits
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+            <div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem', lineHeight: '1.5' }}>
+                Need more credits immediately? Purchase skill credits to enroll in premium courses or request sessions with experts.
+                <br /><strong>1 Credit = $1.00 USD</strong>
+              </p>
+              
+              {buySuccess && (
+                <div style={{ background: 'rgba(0,212,170,0.1)', color: 'var(--accent)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                  ✓ {buySuccess}
+                </div>
+              )}
+              {buyError && (
+                <div style={{ background: 'rgba(255,107,157,0.1)', color: 'var(--secondary)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.9rem', marginBottom: '1rem' }}>
+                  ✗ {buyError}
+                </div>
+              )}
+            </div>
+
+            <form onSubmit={handleBuyCredits} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: 'rgba(15,15,26,0.3)', padding: '1.25rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Number of Credits</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <input
+                    type="number"
+                    min="1"
+                    max="1000"
+                    required
+                    value={buyAmount}
+                    onChange={(e) => setBuyAmount(e.target.value)}
+                    style={{ flex: 1, background: 'var(--bg-tertiary)', border: '1px solid rgba(255,255,255,0.1)', padding: '0.75rem', borderRadius: '8px', color: 'white' }}
+                  />
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', minWidth: '80px' }}>
+                    = ${(Number(buyAmount) || 0).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={buying || !buyAmount || buyAmount < 1}
+                className="btn btn-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                {buying ? 'Processing Payment...' : `Pay $${(Number(buyAmount) || 0).toFixed(2)}`}
+              </button>
+            </form>
           </div>
         </div>
 

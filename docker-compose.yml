@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
 
-  # FastAPI Backend
+  # Django Backend
   backend:
     build: ./backend
     environment:

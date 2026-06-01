@@ -9,10 +9,10 @@ A full-stack web application where users exchange skills instead of money. Trade
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19, Vite, TailwindCSS v4, Zustand, React Router |
-| Backend | FastAPI, SQLAlchemy, Python 3.11 |
+| Backend | Django 5.1, Django REST Framework, Python 3.11 |
 | Database | SQLite (dev) / PostgreSQL (production) |
 | Auth | JWT (python-jose + bcrypt) |
-| Real-time | WebSockets |
+| Real-time | WebSockets (Django Channels) |
 | AI Matching | Cosine similarity (scikit-learn + numpy) |
 | Deployment | Docker + Docker Compose |
 
@@ -29,14 +29,17 @@ A full-stack web application where users exchange skills instead of money. Trade
 cd backend
 pip install -r requirements.txt
 
+# Run migrations
+python manage.py migrate
+
 # Seed sample data (optional)
-python -m app.seed
+python manage.py seed
 
 # Start the API server
-uvicorn app.main:app --reload --port 8000
+python manage.py runserver 8000
 ```
 
-API docs available at: http://localhost:8000/docs
+API available at: http://localhost:8000
 
 ### 2. Frontend Setup
 
@@ -72,24 +75,27 @@ docker-compose up --build
 
 ```
 ├── backend/
-│   ├── app/
-│   │   ├── main.py              # FastAPI entry point
-│   │   ├── database.py          # DB config (SQLite/PostgreSQL)
-│   │   ├── models.py            # SQLAlchemy ORM models
-│   │   ├── schemas.py           # Pydantic schemas
+│   ├── manage.py                # Django management entry point
+│   ├── skillswap/               # Django project config
+│   │   ├── settings.py          # Settings (DB, CORS, JWT, Channels)
+│   │   ├── urls.py              # Root URL config
+│   │   ├── wsgi.py              # WSGI entry point
+│   │   └── asgi.py              # ASGI entry point (HTTP + WebSocket)
+│   ├── api/                     # Main Django app
+│   │   ├── models.py            # Django ORM models
+│   │   ├── serializers.py       # DRF serializers
+│   │   ├── views.py             # API view functions
+│   │   ├── urls.py              # API URL routing
 │   │   ├── auth.py              # JWT auth + password hashing
-│   │   ├── seed.py              # Sample data seeder
-│   │   ├── routers/
-│   │   │   ├── auth_router.py   # Register, Login
-│   │   │   ├── user_router.py   # Profile CRUD
-│   │   │   ├── skill_router.py  # Skills + Marketplace
-│   │   │   ├── session_router.py# Session lifecycle
-│   │   │   ├── wallet_router.py # Credits + Transactions
-│   │   │   ├── match_router.py  # AI matching
-│   │   │   ├── admin_router.py  # Admin panel
-│   │   │   └── ws_router.py     # WebSocket chat
-│   │   └── services/
-│   │       └── matching.py      # Cosine similarity engine
+│   │   ├── exceptions.py        # Custom exception handler
+│   │   ├── admin.py             # Django admin registrations
+│   │   ├── consumers.py         # WebSocket chat consumer
+│   │   ├── routing.py           # WebSocket URL routing
+│   │   ├── services/
+│   │   │   └── matching.py      # Cosine similarity engine
+│   │   └── management/
+│   │       └── commands/
+│   │           └── seed.py      # Sample data seeder
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/
@@ -127,9 +133,10 @@ docker-compose up --build
 
 - **Skill Credits Economy** – 1 hour teaching = +1 credit, learning = -1 credit
 - **AI Matching** – Cosine similarity on skill vectors + reputation + availability scoring
-- **Real-time Chat** – WebSocket-powered session chat
+- **Real-time Chat** – WebSocket-powered session chat (Django Channels)
 - **Reputation System** – Multi-factor ratings (communication, quality, professionalism)
 - **Admin Dashboard** – User management, session overview, platform analytics
+- **Django Admin** – Full model management at /admin/
 - **Glassmorphism UI** – Premium dark theme with gradients and micro-animations
 
 ## API Endpoints
